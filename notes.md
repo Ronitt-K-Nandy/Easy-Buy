@@ -47,7 +47,7 @@
 @package-info			- A special source file used to define package-level annotations and Javadoc documentation for an entire package.
 
 -------------------------------------------------------------------------------------------------------
-##
+## @ElementCollection
 @ElementCollection - in JPA/Hibernate maps a collection of basic types (e.g., String, Integer)
 or classes (e.g., Address or PhoneNumber object) without needing a
 full-fledged independent entity.
@@ -57,7 +57,7 @@ or standalone repository. They are strictly owned by the parent entity
 and share its lifecycle (if the parent is deleted, the collection items go with it)
 
 -------------------------------------------------------------------------------------------------------
-##
+## MappedBy
 @ManyToMany(mappedBy = "products")
 
 • The Owning Side: The entity that does not use mappedBy (@ManyToOne,@JoinColumn,@JoinTable).
@@ -66,4 +66,9 @@ It is responsible for updating the database foreign key.
 tells Hibernate: “Do not create a separate foreign key or join table for this side; look at the product field in the other entity to see how this relationship is mapped.”
 
 -------------------------------------------------------------------------------------------------------
-##
+## ImageKit
+Signup, then Login into image kit with appropriate credentials, and go to developer's option to get the
+keys and url endpoint.
+
+-------------------------------------------------------------------------------------------------------
+## 
