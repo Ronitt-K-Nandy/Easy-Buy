@@ -71,4 +71,17 @@ Signup, then Login into image kit with appropriate credentials, and go to develo
 keys and url endpoint.
 
 -------------------------------------------------------------------------------------------------------
-## 
+## Load-Balancing
+1. <spring-cloud-starter-netflix-eureka-client> dependency automatically registers the service with Eureka server and
+also enables load balancing for the service.
+
+2. <spring-cloud-starter-openfeign> dependency automatically registers the service with Eureka server and
+also enables load balancing for the service.
+
+3. <spring-cloud-loadbalancer> is automatically included in
+the <spring-cloud-starter-netflix-eureka-client> and <spring-cloud-starter-openfeign> dependency,
+so you don't need to add it separately.
+
+4. RestTemplate / RestClient - For @Bean you need @LoadBalanced. You can then make requests using the service's Eureka application name (e.g., http://ORDER-SERVICE/api/orders).
+
+5. Spring Cloud Gateway - use lb://SERVICE-NAME in your route URIs, the gateway automatically uses the bundled load balancer to resolve and distribute traffic.
