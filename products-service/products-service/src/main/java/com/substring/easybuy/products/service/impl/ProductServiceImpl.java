@@ -10,7 +10,7 @@ import com.substring.easybuy.products.entity.Review;
 import com.substring.easybuy.products.repository.CategoryRepo;
 import com.substring.easybuy.products.repository.ProductRepo;
 import com.substring.easybuy.products.repository.ReviewRepo;
-import com.substring.easybuy.products.service.ImageKitStorageService;
+import com.substring.easybuy.products.service.ImageStorageService;
 import com.substring.easybuy.products.service.ProductService;
 import com.substring.easybuy.products.exception.InvalidRequestException;
 import com.substring.easybuy.products.exception.ResourceNotFoundException;
@@ -33,13 +33,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
     private final CategoryRepo categoryRepo;
     private final ReviewRepo reviewRepo;
-    private final ImageKitStorageService imageKitStorageService;
 
-    public ProductServiceImpl(ProductRepo productRepo, CategoryRepo categoryRepo, ReviewRepo reviewRepo, ImageKitStorageService imageKitStorageService) {
+
+    private final ImageStorageService imageStorageService;
+
+    public ProductServiceImpl(ProductRepo productRepo, CategoryRepo categoryRepo, ReviewRepo reviewRepo, ImageStorageService imageStorageService) {
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
         this.reviewRepo = reviewRepo;
-        this.imageKitStorageService = imageKitStorageService;
+        this.imageStorageService = imageStorageService;
     }
 
     @Override
@@ -200,7 +202,7 @@ public class ProductServiceImpl implements ProductService {
         }
         List<String> uploadedUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            uploadedUrls.add(imageKitStorageService.upload(file));
+            uploadedUrls.add(imageStorageService.upload(file));
         }
         return uploadedUrls;
     }

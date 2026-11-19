@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ReviewRepo extends JpaRepository<Review, Long> {
-    List<Review> findByProduct(Product category);
+    List<Review> findByProduct(Product product);
 
     List<Review> findByProductId(UUID productId);
 }

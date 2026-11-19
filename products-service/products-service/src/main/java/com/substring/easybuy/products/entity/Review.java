@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.util.UUID;
+import java.time.Instant;
 
 @Entity
 @Table(name = "reviews")
@@ -26,6 +26,10 @@ public class Review {
 
     @ManyToOne
     private  Product product;
+
+
+    @CreatedDate
+    private Instant createdAt;
 
 
 }
