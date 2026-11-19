@@ -85,3 +85,113 @@ so you don't need to add it separately.
 4. RestTemplate / RestClient - For @Bean you need @LoadBalanced. You can then make requests using the service's Eureka application name (e.g., http://ORDER-SERVICE/api/orders).
 
 5. Spring Cloud Gateway - use lb://SERVICE-NAME in your route URIs, the gateway automatically uses the bundled load balancer to resolve and distribute traffic.
+
+-------------------------------------------------------------------------------------------------------
+
+## @EnableJpaAuditing
+
+Enables us to use :-
+
+• @CreatedDate — Automatically populates the timestamp when an entity is first saved.
+• @LastModifiedDate — Automatically updates the timestamp on every modification.
+• @CreatedBy — Populates the user/auditor who created the entity (requires an AuditorAware bean).
+• @LastModifiedBy — Populates the user/auditor who last modified the entity (requires an AuditorAware bean).
+
+• @MappedSuperclass - designates a base class whose mapping information (fields and JPA annotations)
+is inherited by its subclasses, without creating a separate database table for the base class itself.
+
+• Step 1 :- Annotate main application file with "@EnableJpaAuditing".
+• Step 2 :- Annotate file with "@EntityListeners(AuditingEntityListener.class)" where the date fields with 
+            above annotations are used.
+
+-------------------------------------------------------------------------------------------------------
+
+## RestClient vs RestTemplate
+
+1. Introduced In
+
+RestClient: Introduced in Spring Framework 6.1 and Spring Boot 3.2.
+RestTemplate: Introduced in Spring Framework 3.0.
+
+2. Current Status
+
+RestClient: Actively maintained and recommended for new synchronous HTTP client implementations.
+RestTemplate: In maintenance mode, with no new features planned.
+
+3. API Style
+
+RestClient: Provides a modern, fluent API similar to WebClient, making HTTP requests more readable and easier to write.
+RestTemplate: Uses a legacy API with overloaded methods such as getForObject(), postForObject(), and exchange().
+
+4. Execution Model
+
+RestClient: Synchronous and blocking execution.
+RestTemplate: Synchronous and blocking execution.
+
+5. Dependencies
+
+RestClient: Available through spring-boot-starter-web. No need to include Spring WebFlux.
+RestTemplate: Also available through spring-boot-starter-web.
+
+6. Under the Hood
+
+RestClient: Shares the same underlying HTTP infrastructure as RestTemplate, including ClientHttpRequestFactory, interceptors, and HTTP message converters.
+RestTemplate: Uses the same underlying HTTP infrastructure and supports different HTTP engines, such as JDK HTTP Client, Apache HttpClient, and OkHttp (depending on the configured implementation).
+
+-------------------------------------------------------------------------------------------------------
+
+## Communication between Services
+
+1. Register all services into Service Registry
+2. RestTemplate can be used in this case, either directly use ulr with hostname and port name
+   like localhost:8080, and create a bean object for RestTemplate with @Bean
+3. Or use service names like
+   "PRODUCT-SERVICE", @LoadBalanced needs to be added ith @Bean for RestTemplate.
+
+Ex - @GetMapping("/client/{productId}")
+    public ResponseEntity<ProductSnapshot> getProductForProductClient(@PathVariable("productId") UUID productId){
+    ResponseEntity<ProductSnapshot> forEntity = restTemplate.getForEntity("http://PRODUCT-SERVICE/api/products/" + productId, ProductSnapshot.class);
+    return forEntity;
+    }
+
+and,
+
+@Configuration
+public class ClientServiceImpl {
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+}
+
+-------------------------------------------------------------------------------------------------------
+
+## Spring Cloud OpenFeign
+
+@FeignClient(name = "productClient", url = "${product.service.id}")
+    if, ${product.service.id} contains a URL like http://localhost:8081
+@FeignClient(name = "${product.service.id}")
+    if, ${product.service.id} is a name like "product-service"
+
+Ex- @EnableFeignClients in main application file after adding dependency
+
+and,
+
+    @GetMapping("/client/{productId}")
+    public ProductSnapshot getProductForProductClient1(@PathVariable("productId") UUID productId){
+    return productClient.fetchProductsForInventory(productId);
+    }
+
+and,
+
+    @FeignClient(name="PRODUCT-SERVICE")
+    public interface ProductClient{
+	@GetMapping("/api/products/{productId}")
+	ProductSnapshot fetchProductsForInventory(@PathVariable("productId") UUID productId);
+}
+
+-------------------------------------------------------------------------------------------------------
+
+##

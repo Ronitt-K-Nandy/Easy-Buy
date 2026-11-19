@@ -70,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
         List<Category> categories = resolveCategories(productDto.getCategories());
         product.setCategories(categories);
         Product savedProduct = productRepo.save(product);
+        //just to teach everyone : This type of logics also need some time in projects
         syncCategoryLinks(savedProduct, categories);
         return toDto(savedProduct);
     }
@@ -216,6 +217,8 @@ public class ProductServiceImpl implements ProductService {
         dto.setPrice(product.getPrice());
         dto.setDiscount(product.getDiscount());
         dto.setLive(product.getLive());
+        dto.setCreatedAt(product.getCreatedAt());
+        dto.setUpdatedAt(product.getUpdatedAt());
         dto.setProductImages(product.getProductImages() == null ? new ArrayList<>() : new ArrayList<>(product.getProductImages()));
         dto.setCategories(product.getCategories() == null ? new ArrayList<>() : product.getCategories().stream().map(this::toCategoryDtoShallow).collect(Collectors.toList()));
         dto.setReviews(product.getReviews() == null ? new ArrayList<>() : product.getReviews().stream().map(this::toReviewDtoShallow).collect(Collectors.toList()));

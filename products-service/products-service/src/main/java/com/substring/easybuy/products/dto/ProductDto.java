@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,8 +39,11 @@ public class ProductDto {
     @Min(value = 0, message = "discount must be greater than or equal to 0")
     @Max(value = 100, message = "discount must be less than or equal to 100")
     private Integer discount;
+
     private Boolean live;
     private List<String> productImages;
     private List<CategoryDto> categories;
     private List<ReviewDto> reviews;
+    private Instant createdAt;
+    private Instant updatedAt;
 }

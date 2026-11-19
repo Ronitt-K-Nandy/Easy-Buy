@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +18,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -32,7 +29,8 @@ public class Product {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String shortDesc;
-    @Lob
+
+    @Column(columnDefinition = "TEXT")
     private String longDesc;
     private Double price;
     private Integer discount;
@@ -49,8 +47,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    @CreatedDate
-    private Instant createdAt;
 
 
 }
