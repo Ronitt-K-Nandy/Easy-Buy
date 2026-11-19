@@ -21,14 +21,6 @@ import java.util.UUID;
 public class ProductDto {
     private UUID id;
 
-    //@NotNull -> does not allow - null, allow - blank(size = 0 string)
-    //@NotBlank -> does not allow both null and blank(size 0 string)
-    //@Positive -> spring allows values which are >0
-    //@Negative -> spring allows values which are <0
-    //@Size -> for string values
-    //@Min, @Max - for numeric values
-    // All from jakarta.validation.constraints
-    // require dependency - spring-boot-starter-validation
     @NotBlank(message = "title is required")
     private String title;
 
