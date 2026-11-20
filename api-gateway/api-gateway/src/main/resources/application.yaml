@@ -1,0 +1,45 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  application:
+    name: ${API_GATEWAY_APPLICATION_NAME:unknown}
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+         discovery:
+           locator:
+             enabled: false
+             lower-case-service-id: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: READ_ONLY
+
+server:
+  port: ${SERVER_PORT_API_GATEWAY:9090}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:${SERVER_PORT_SERVICE_DISCOVERY:8080}/eureka}
+
+
+  instance:
+    preferIpAddress: true
+
+
+
+product:
+  service:
+    id: lb://${PRODUCT_APPLICATION_NAME:productService}
+cartorder:
+  service:
+    id: lb://${CART_ORDER_APPLICATION_NAME:cartOrderService}
