@@ -12,10 +12,13 @@ public class RouteConfig {
 
     private final String productServiceId;
     private final String cartOrderServiceId;
+    private final String inventoryServiceId;
 
-    public RouteConfig(@Value("${product.service.id}") String productServiceId, @Value("${cartorder.service.id}") String cartOrderServiceId) {
+    public RouteConfig(@Value("${product.service.id}") String productServiceId, @Value("${cartorder.service.id}") String cartOrderServiceId
+            , @Value("${inventory.service.id}") String inventoryServiceId) {
         this.productServiceId = productServiceId;
         this.cartOrderServiceId = cartOrderServiceId;
+        this.inventoryServiceId = inventoryServiceId;
     }
 
     @Bean
@@ -34,7 +37,13 @@ public class RouteConfig {
                         .rewritePath("^/carts$", "/api/carts")
                         .rewritePath("^/carts/(?<remaining>.*)", "/api/carts/${remaining}"))
                         //.rewritePath("/cart-orders/?(?<remaining>.*)", "/${remaining}"))
-                        .uri(cartOrderServiceId)
+                        .uri(cartOrderServiceId))
+                .route("inventory-route", route -> route
+                        .path("/inventories","/inventories/**")
+                        .filters(f -> f
+                        .rewritePath("^/inventories$", "/api/inventories")
+                        .rewritePath("^/inventories/(?<remaining>.*)", "/api/inventories/${remaining}"))
+                        .uri(inventoryServiceId)
                 )
 
 

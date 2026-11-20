@@ -72,13 +72,13 @@ keys and url endpoint.
 
 -------------------------------------------------------------------------------------------------------
 ## Load-Balancing
-1. <spring-cloud-starter-netflix-eureka-client> dependency automatically registers the service with Eureka server and
+1. "spring-cloud-starter-netflix-eureka-client" dependency automatically registers the service with Eureka server and
 also enables load balancing for the service.
 
-2. <spring-cloud-starter-openfeign> dependency automatically registers the service with Eureka server and
+2. "spring-cloud-starter-openfeign" dependency automatically registers the service with Eureka server and
 also enables load balancing for the service.
 
-3. <spring-cloud-loadbalancer> is automatically included in
+3. "spring-cloud-loadbalancer" is automatically included in
 the <spring-cloud-starter-netflix-eureka-client> and <spring-cloud-starter-openfeign> dependency,
 so you don't need to add it separately.
 
@@ -194,4 +194,15 @@ and,
 
 -------------------------------------------------------------------------------------------------------
 
-##
+##  Directly passwords cannot be used for git. Ex- in Config Server application.yml
+
+1. Config Server git repository is supposed to be  private to hide all configurations, and 
+    to get the access , we need username and password.
+2. In case of passwords, you have to go to Settings > developer's settings > Personal access tokens >
+   Fine-grained tokens > Generate new token
+3. Only select repositories: <Select ConfigServer>, then, Permissions>Repositories>
+   Contents:Read-Only, Metadata:Read-Only
+
+-------------------------------------------------------------------------------------------------------
+
+##  

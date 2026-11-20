@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ${CONFIG_SERVER_APPLICATION_NAME}
+
+  config:
+    import: optional:file:.env[.properties]
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GITHUB_URL:https://github.com/Ronitt-K-Nandy/ConfigServer.git}
+          username: ${GITHUB_USERNAME:default}
+          password: ${GITHUB_PASSWORD:default}
+          default-label: main
+          clone-on-start: true
+
+server:
+  port: ${SERVER_PORT_CONFIG_SERVER}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:${SERVER_PORT_SERVICE_DISCOVERY:8080}/eureka}
