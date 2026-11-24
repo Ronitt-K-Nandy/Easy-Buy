@@ -1,12 +1,12 @@
 spring:
   application:
-    name: ${SD_APPLICATION_NAME}
+    name: service-discovery
 
   config:
     import: optional:file:.env[.properties]
 
 server:
-  port: ${SERVER_PORT_SERVICE_DISCOVERY:8080}
+  port: 8761
 
 
 eureka:

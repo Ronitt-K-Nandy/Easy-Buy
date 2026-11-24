@@ -1,17 +1,20 @@
-spring:
-  application:
-    name: ${CONFIG_SERVER_APPLICATION_NAME}
+encrypt:
+  key: ${ENCRYPT_KEY}
 
+spring:
   config:
-    import: optional:file:.env[.properties]
+    import: optional:file:.env[.properties],optional:configserver:http://localhost:8079
+
+  application:
+    name: config-server
 
   cloud:
     config:
       server:
         git:
-          uri: ${GITHUB_URL:https://github.com/Ronitt-K-Nandy/ConfigServer.git}
-          username: ${GITHUB_USERNAME:default}
-          password: ${GITHUB_PASSWORD:default}
+          uri: ${GIT_CONFIG_SERVER_URL}
+          username: ${GIT_CONFIG_SERVER_USERNAME}
+          password: "{cipher}7e05f367767ffeb64526de39e1b4ad5d6727e1f354f6bd716ae70639fb1df760f6a46af219e371dd99d33954afae4fe9d2601954b3b053ea57c0605d5f181b9e9e91e12d4f4b601edf7642673d04778778c9720c7b07b408e6a877d2bf6221151c442ae15ad995fe6b16c5a4800d81ff"
           default-label: main
           clone-on-start: true
 
@@ -24,10 +27,6 @@ management:
       exposure:
         include: health,info
 
-
 eureka:
   instance:
     preferIpAddress: true
-  client:
-    service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:${SERVER_PORT_SERVICE_DISCOVERY:8080}/eureka}

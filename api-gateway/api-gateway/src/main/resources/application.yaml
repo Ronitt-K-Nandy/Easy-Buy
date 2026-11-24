@@ -1,12 +1,12 @@
 spring:
   config:
-    import: optional:file:.env[.properties]
+    import: optional:file:.env[.properties],optional:configserver:http://localhost:8079
 
   profiles:
     active: dev
 
   application:
-    name: ${API_GATEWAY_APPLICATION_NAME:unknown}
+    name: api-gateway
 
   cloud:
     gateway:
@@ -27,16 +27,4 @@ management:
       access: READ_ONLY
 
 server:
-  port: ${SERVER_PORT_API_GATEWAY:9090}
-
-
-
-product:
-  service:
-    id: lb://${PRODUCT_APPLICATION_NAME:productService}
-cartorder:
-  service:
-    id: lb://${CART_ORDER_APPLICATION_NAME:cartOrderService}
-inventory:
-  service:
-    id: lb://${INVENTORY_APPLICATION_NAME:inventoryService}
+  port: ${SERVER_PORT_API_GATEWAY}

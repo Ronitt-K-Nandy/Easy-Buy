@@ -205,4 +205,18 @@ and,
 
 -------------------------------------------------------------------------------------------------------
 
-##  
+##  Migrating all .properties to Config Server
+
+Inspite of "encrypt.key= ${ENCRYPT_KEY}" in application.properties in Config Server, we have to use 
+"encrypt.key= ${ENCRYPT_KEY}" in Config Server also, keeping in mind no file is made in Config Server as
+"config-server.properties".
+
+encrypt a password - access http://localhost:8079/encrypt in "POST" method,
+it produces  password in postman  for raw, text where you input a password, and it produces
+the password in encrypted form, use that encrypted password in your .properties
+or .yml as {cipher}(write_the_encrypted_passord_here).
+
+Also, use "/decrypt" to decrypt and see the actual password.
+
+-------------------------------------------------------------------------------------------------------
+
