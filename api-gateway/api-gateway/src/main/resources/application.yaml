@@ -28,3 +28,11 @@ management:
 
 server:
   port: ${SERVER_PORT_API_GATEWAY}
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10000

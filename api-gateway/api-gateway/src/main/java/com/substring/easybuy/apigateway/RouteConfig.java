@@ -28,6 +28,8 @@ public class RouteConfig {
                         .path("/products", "/products/**")
                         .filters(f -> f
                                 .addRequestHeader("x-api-gateway", "value from api gateway")
+                                .circuitBreaker(c -> c.setName("productCircuitBreaker")
+                                                            .setFallbackUri("forward:/product-fallback"))
                                 .rewritePath("^/products$", "/api/products")
                                 .rewritePath("^/products/(?<remaining>.*)", "/api/products/${remaining}"))
                         .uri("lb://"+productServiceId))

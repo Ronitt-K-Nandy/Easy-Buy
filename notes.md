@@ -234,4 +234,17 @@ Also, use "/decrypt" to decrypt and see the actual password.
     After hitting "actuator/refresh" the valu gets updated, after hitting "/checkRefreshValue" again,
     we get the refreshed value.
 
+-------------------------------------------------------------------------------------------------------
+
+##  Circuit Breaker Pattern
+
+1) For API Gateway - add dependency, and properties, and make changes in the file.
+2) For testing you need to access "actuator/circuitbreakers", to check the failure rates,
+    no. of attempts, then, State(open,closed, half-open)
+
+Initially it has status "CLOSED", after hitting the request, you will get no failures,
+then turn-off the service, and keep on hitting the request, so that it crosses the 
+failure threshold, you will see that the status becomes "OPEN", based on the properties value
+it becomes "HALF-OPEN" after some time. Then keep on hitting the request after turning the service on.
+it lowers down failure rate and makes the service status "CLOSED" again.
 
