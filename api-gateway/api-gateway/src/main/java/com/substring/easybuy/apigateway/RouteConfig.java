@@ -14,8 +14,8 @@ public class RouteConfig {
     private final String cartOrderServiceId;
     private final String inventoryServiceId;
 
-    public RouteConfig(@Value("${product.service.id}") String productServiceId, @Value("${cartorder.service.id}") String cartOrderServiceId
-            , @Value("${inventory.service.id}") String inventoryServiceId) {
+    public RouteConfig(@Value("${PRODUCT_APPLICATION_NAME}") String productServiceId, @Value("${CART_ORDER_APPLICATION_NAME}") String cartOrderServiceId
+            , @Value("${INVENTORY_APPLICATION_NAME}") String inventoryServiceId) {
         this.productServiceId = productServiceId;
         this.cartOrderServiceId = cartOrderServiceId;
         this.inventoryServiceId = inventoryServiceId;
@@ -30,23 +30,19 @@ public class RouteConfig {
                                 .addRequestHeader("x-api-gateway", "value from api gateway")
                                 .rewritePath("^/products$", "/api/products")
                                 .rewritePath("^/products/(?<remaining>.*)", "/api/products/${remaining}"))
-                        .uri(productServiceId))
+                        .uri("lb://"+productServiceId))
                 .route("cart-order-route", route -> route
                         .path("/carts","/carts/**")
                         .filters(f -> f
                         .rewritePath("^/carts$", "/api/carts")
                         .rewritePath("^/carts/(?<remaining>.*)", "/api/carts/${remaining}"))
-                        //.rewritePath("/cart-orders/?(?<remaining>.*)", "/${remaining}"))
-                        .uri(cartOrderServiceId))
+                        .uri("lb://"+cartOrderServiceId))
                 .route("inventory-route", route -> route
                         .path("/inventories","/inventories/**")
                         .filters(f -> f
                         .rewritePath("^/inventories$", "/api/inventories")
                         .rewritePath("^/inventories/(?<remaining>.*)", "/api/inventories/${remaining}"))
-                        .uri(inventoryServiceId)
-                )
-
-
+                        .uri("lb://"+inventoryServiceId))
                 .build();
     }
 
