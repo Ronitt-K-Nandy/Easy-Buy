@@ -220,3 +220,18 @@ Also, use "/decrypt" to decrypt and see the actual password.
 
 -------------------------------------------------------------------------------------------------------
 
+##  Refreshing environement values
+
+1) Manual restart
+2) Automatic update
+ a) actuator/refresh [POST] - hit this in postman
+ b) Spring Cloud Bus
+ c) Monitor
+
+* Remember - to add "@RefreshScope" in Controller, both "@RefreshScope" and "actuator/refresh" is required.
+
+2a) In ProductController, after hitting "/checkRefreshValue" , the initial value is displayed
+    After hitting "actuator/refresh" the valu gets updated, after hitting "/checkRefreshValue" again,
+    we get the refreshed value.
+
+
