@@ -238,6 +238,7 @@ Also, use "/decrypt" to decrypt and see the actual password.
 
 ##  Circuit Breaker Pattern
 
+    #Api Gateway
 1) For API Gateway - add dependency, and properties, and make changes in the file.
 2) For testing you need to access "actuator/circuitbreakers", to check the failure rates,
     no. of attempts, then, State(open,closed, half-open)
@@ -248,3 +249,9 @@ failure threshold, you will see that the status becomes "OPEN", based on the pro
 it becomes "HALF-OPEN" after some time. Then keep on hitting the request after turning the service on.
 it lowers down failure rate and makes the service status "CLOSED" again.
 
+
+    #Feign Client
+
+1) Add dependency , properties make a class to handle fallback method, and link that to the 
+   interface with @FeignClient it is implementing.
+2) 
