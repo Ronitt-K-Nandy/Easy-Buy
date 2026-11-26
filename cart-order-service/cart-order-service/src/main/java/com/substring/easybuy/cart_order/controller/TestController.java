@@ -3,20 +3,30 @@ package com.substring.easybuy.cart_order.controller;
 import com.substring.easybuy.cart_order.client.ProductClientTest;
 import com.substring.easybuy.cart_order.dto.PagedResponse;
 import com.substring.easybuy.cart_order.dto.ProductResponse;
+import com.substring.easybuy.cart_order.dto.ProductSnapshot;
+import io.github.resilience4j.retry.annotation.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @Validated
 @RequestMapping("cart0rder/api/test")
+@Slf4j
 public class TestController {
 
 	@Autowired
 	private ProductClientTest _productClientTest;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
 
 	@GetMapping("/{productId}")
 	public ProductResponse testFeignClient(@PathVariable String productId)
@@ -34,5 +44,21 @@ public class TestController {
 	public ResponseEntity<ProductSnapshot> getProductForProductClient(@PathVariable("productId") String productId){
 		ResponseEntity<ProductSnapshot> forEntity = restTemplate.getForEntity("http://PRODUCT-SERVICE/api/products/" + productId, ProductSnapshot.class);
 		return forEntity;
+	}
+
+	@GetMapping("/retry/client/{productId}")
+	@Retry(name="getProductForProductClient", fallbackMethod = "testRetryForRestClientOrTemplateFallBack")
+	public ResponseEntity<ProductSnapshot> testRetryForRestClientOrTemplate(@PathVariable("productId") String productId){
+		log.info("Retrying...");
+		if(true){
+			throw new NullPointerException();
+		}
+		ResponseEntity<ProductSnapshot> forEntity = restTemplate.getForEntity("http://PRODUCT-SERVICE/api/products/" + productId, ProductSnapshot.class);
+		return forEntity;
+	}
+
+	public ResponseEntity<ProductSnapshot> testRetryForRestClientOrTemplateFallBack(@PathVariable("productId") String productId, Throwable t){
+		log.info("Retry Fallabck ..."+t.getMessage());
+		return null;
 	}
 }
