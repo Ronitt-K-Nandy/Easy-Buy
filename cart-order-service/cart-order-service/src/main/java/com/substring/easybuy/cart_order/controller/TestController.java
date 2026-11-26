@@ -30,4 +30,9 @@ public class TestController {
 		return _productClientTest.getProducts();
 	}
 
+	@GetMapping("/client/{productId}")
+	public ResponseEntity<ProductSnapshot> getProductForProductClient(@PathVariable("productId") String productId){
+		ResponseEntity<ProductSnapshot> forEntity = restTemplate.getForEntity("http://PRODUCT-SERVICE/api/products/" + productId, ProductSnapshot.class);
+		return forEntity;
+	}
 }
