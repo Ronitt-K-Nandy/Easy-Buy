@@ -1,6 +1,7 @@
 package com.substring.easybuy.cart_order.controller;
 
 import com.substring.easybuy.cart_order.client.ProductClientTest;
+import com.substring.easybuy.cart_order.dto.PagedResponse;
 import com.substring.easybuy.cart_order.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,12 @@ public class TestController {
 	public ProductResponse testFeignClient(@PathVariable String productId)
 	{
 		return _productClientTest.getProductById(productId);
+	}
+
+	@GetMapping("/products")
+	public PagedResponse<ProductResponse> testFeignClient2()
+	{
+		return _productClientTest.getProducts();
 	}
 
 }
