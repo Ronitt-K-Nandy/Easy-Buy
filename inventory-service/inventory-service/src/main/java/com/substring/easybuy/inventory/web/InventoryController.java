@@ -6,6 +6,7 @@ import java.util.UUID;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +31,7 @@ import com.substring.easybuy.inventory.service.InventoryService;
 
 @RestController
 @Validated
+@Slf4j
 @RequestMapping("/api/inventories")
 public class InventoryController {
 
@@ -103,5 +105,14 @@ public class InventoryController {
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/testRetry")
+	public String testingRetryPattern() {
+		log.info("Retrying to Connect...");
+		if(1==1) { // forcing retry pattern to test, when it gets exception it retrys on its own.
+			throw new NullPointerException();
+		}
+		return "All is Fine!";
 	}
 }
