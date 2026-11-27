@@ -4,9 +4,11 @@ import com.substring.easybuy.cart_order.client.ProductClientTest;
 import com.substring.easybuy.cart_order.dto.PagedResponse;
 import com.substring.easybuy.cart_order.dto.ProductResponse;
 import com.substring.easybuy.cart_order.dto.ProductSnapshot;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Mono;
 
 @RestController
 @Validated
@@ -47,7 +50,7 @@ public class TestController {
 	}
 
 	@GetMapping("/retry/client/{productId}")
-	@Retry(name="getProductForProductClient", fallbackMethod = "testRetryForRestClientOrTemplateFallBack")
+	@Retry(name="getProductForProductClientRetry", fallbackMethod = "testRetryForRestClientOrTemplateFallBack")
 	public ResponseEntity<ProductSnapshot> testRetryForRestClientOrTemplate(@PathVariable("productId") String productId){
 		log.info("Retrying...");
 		if(true){
@@ -60,5 +63,18 @@ public class TestController {
 	public ResponseEntity<ProductSnapshot> testRetryForRestClientOrTemplateFallBack(@PathVariable("productId") String productId, Throwable t){
 		log.info("Retry Fallabck ..."+t.getMessage());
 		return null;
+	}
+
+	@GetMapping("/cb/client/{productId}")
+	@CircuitBreaker(name="getProductForProductClientCB", fallbackMethod ="fallBackForCBClientAndTemplate")
+	public ResponseEntity<?> testCBForRestClientOrTemplate(@PathVariable("productId") String productId){
+		ResponseEntity<ProductSnapshot> forEntity = restTemplate.getForEntity("http://PRODUCT-SERVICE/api/products/" + productId, ProductSnapshot.class);
+		return forEntity;
+	}
+
+	public ResponseEntity<?> fallBackForCBClientAndTemplate(String productId, Exception ex){
+		return ResponseEntity
+				.status(HttpStatus.SERVICE_UNAVAILABLE)
+				.body("Server is down, please after sometime...");
 	}
 }
